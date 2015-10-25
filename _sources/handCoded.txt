@@ -1,0 +1,5 @@
+handCoded
+=========
+
+.. automodule:: handCoded
+    :members:

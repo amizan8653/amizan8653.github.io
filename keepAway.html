@@ -1,0 +1,664 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>keepAway &mdash; Keepaway 7-1-2015 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '7-1-2015',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Keepaway 7-1-2015 documentation" href="index.html" />
+    <link rel="next" title="kUtil" href="kUtil.html" />
+    <link rel="prev" title="handCoded" href="handCoded.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-keepAway">
+<span id="keepaway"></span><h1>keepAway<a class="headerlink" href="#module-keepAway" title="Permalink to this headline">¶</a></h1>
+<p>This module contains keepAway, which is the simulator class.</p>
+<dl class="class">
+<dt id="keepAway.keepAway">
+<em class="property">class </em><code class="descclassname">keepAway.</code><code class="descname">keepAway</code><span class="sig-paren">(</span><em>inputAgentSigmaNoise=0.1</em><span class="sig-paren">)</span><a class="headerlink" href="#keepAway.keepAway" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the simulator class. It is triggered by the runme module, and will 
+control most of the execution of the simulation. It is responsible for holding
+all of the true values of positions. It sends noisy information to all the 
+agents, and also allows agents to interact with it. Agents have no control
+whatsoever of variables and functions within keepAway.</p>
+<dl class="method">
+<dt id="keepAway.keepAway._keepAway__agentBallIntersection">
+<code class="descname">_keepAway__agentBallIntersection</code><span class="sig-paren">(</span><em>inputAgent</em>, <em>agentType</em><span class="sig-paren">)</span><a class="headerlink" href="#keepAway.keepAway._keepAway__agentBallIntersection" title="Permalink to this definition">¶</a></dt>
+<dd><p>This private function will take an input agent, and 
+check to see if that agent intersects with the ball or not.
+If so, return true. otherwise return false.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>inputAgent</strong> (<a class="reference internal" href="agent.html#module-agent" title="agent"><em>agent</em></a>) &#8211; the agent that you&#8217;re checking to see
+if it intersects with the ball or not.</li>
+<li><strong>agentType</strong> (<em>string</em>) &#8211; &#8220;keeper&#8221; or &#8220;taker&#8221;</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">true if the agent intersects with the ball, false otherwise</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="keepAway.keepAway._keepAway__boundSimpleVars">
+<code class="descname">_keepAway__boundSimpleVars</code><span class="sig-paren">(</span><em>noisySimpleStateVars</em><span class="sig-paren">)</span><a class="headerlink" href="#keepAway.keepAway._keepAway__boundSimpleVars" title="Permalink to this definition">¶</a></dt>
+<dd><p>For the sake of simulating sensor error, some noise is added to the state variables
+that are calculated. However, the last 2 state variables are cosine values. Cosine values
+are bounded [-1.0, 1.0], so this function was made to ensure that the last 2 state variables are 
+bounded by [-1.0, 1.0] after noise is added to it. This is important because the arccos
+of these 2 state variables is calculated sometimes, and if the value input into arccos
+just so happens to be out of this range,the program will crash.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>noisySimpleStateVars</strong> (<em>tuple or list of floats</em>) &#8211; The noisy version of the simple state variables. This should
+be calculated in the sendSimpleStateVars function of keepaway.py.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the noisySimpleStateVars, but with the last 2 parameters bounded by [-1.0, 1.0]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple or list of floats</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="keepAway.keepAway._keepAway__displayScore">
+<code class="descname">_keepAway__displayScore</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#keepAway.keepAway._keepAway__displayScore" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function will display the keeper score on the top left corner of 
+the screen</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">no return</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="keepAway.keepAway._keepAway__drawWorld">
+<code class="descname">_keepAway__drawWorld</code><span class="sig-paren">(</span><em>grid=None</em><span class="sig-paren">)</span><a class="headerlink" href="#keepAway.keepAway._keepAway__drawWorld" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function will go and update the screen to display the next frame of 
+animation. This function should be called only after all the movement
+of agents and the ball has been calculated.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">no return</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="keepAway.keepAway._keepAway__exitSim">
+<code class="descname">_keepAway__exitSim</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#keepAway.keepAway._keepAway__exitSim" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function will quit the simulation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">no return</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="keepAway.keepAway._keepAway__finish">
+<code class="descname">_keepAway__finish</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#keepAway.keepAway._keepAway__finish" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function will notify the user that the simulation has ended, display 
+the final score, and prompt the user to press Q to quit.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">no return</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="keepAway.keepAway._keepAway__getLegalQuadrants">
+<code class="descname">_keepAway__getLegalQuadrants</code><span class="sig-paren">(</span><em>inputAgent</em><span class="sig-paren">)</span><a class="headerlink" href="#keepAway.keepAway._keepAway__getLegalQuadrants" title="Permalink to this definition">¶</a></dt>
+<dd><p>When it comes to movement, there are 4 different quadrants defined:
+2 3
+1 0
+quadrant 0 is from directions 0 degrees to 90 degrees
+quadrant 1 is from directions 90 degrees to 180 degrees
+quadrant 2 is from directions 180 degrees to 270 degrees
+quadrant 3 is from directions 270 degrees to 360 degrees</p>
+<p>This function returns the set of quadrants that an agent is allowed 
+to move to</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>inputAgent</strong> (<a class="reference internal" href="agent.html#module-agent" title="agent"><em>agent</em></a>) &#8211; a reference to the agent whose set of legal quadrants 
+is being calculated for</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">set of quadrants the agent can move to</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">set of integers</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is a private function that the user shouldn&#8217;t worry about calling.
+Only the move_attempt() function should be called.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="keepAway.keepAway._keepAway__getQuadAttemptingToMoveTo">
+<code class="descname">_keepAway__getQuadAttemptingToMoveTo</code><span class="sig-paren">(</span><em>agent</em>, <em>noiseFreeDirectionVector</em><span class="sig-paren">)</span><a class="headerlink" href="#keepAway.keepAway._keepAway__getQuadAttemptingToMoveTo" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a private function that is called by the moveAttempt function.
+this function is used to determine which quadrant the agent is attempting
+to move to.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>agent</strong> (<a class="reference internal" href="agent.html#module-agent" title="agent"><em>agent</em></a>) &#8211; a reference to the agent that is is being moved.</li>
+<li><strong>noiseFreeDirectionVector</strong> (<em>a tuple of floats</em>) &#8211; a vector that represented the displacement
+that the agent is trying to achieve.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the quadrant the agent is trying to move to, indexed 0 - 3</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is a private function that the user shouldn&#8217;t worry about calling.
+Only the move_attempt() function should be called.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="keepAway.keepAway._keepAway__isDirectionLegal">
+<code class="descname">_keepAway__isDirectionLegal</code><span class="sig-paren">(</span><em>inputAgent</em>, <em>direction</em><span class="sig-paren">)</span><a class="headerlink" href="#keepAway.keepAway._keepAway__isDirectionLegal" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a private function used exclusively by __getLegalQuadrants in
+order to determine if an agent is legally allowed to move in a given
+direction</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>inputAgent</strong> (<a class="reference internal" href="agent.html#module-agent" title="agent"><em>agent</em></a>) &#8211; a reference to the agent, which is being checked to 
+see if it can move in a given direction</li>
+<li><strong>direction</strong> (<em>string</em>) &#8211; the direction the agent is trying to go. It&#8217;s going
+to be either up,down,left, or right</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">true if the agent is allowed to move in that direction, otherwise false</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="keepAway.keepAway._keepAway__message_to_screen">
+<code class="descname">_keepAway__message_to_screen</code><span class="sig-paren">(</span><em>msg</em>, <em>color</em>, <em>y_displace=0</em>, <em>size='small'</em><span class="sig-paren">)</span><a class="headerlink" href="#keepAway.keepAway._keepAway__message_to_screen" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function will print a message to the screen</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>msg</strong> (<em>string</em>) &#8211; the message that you want to print to screen</li>
+<li><strong>color</strong> (<em>tuple of 3 integers. This is RGB, where each dimension 
+ranges from 0 to 255</em>) &#8211; the color you want the message to be</li>
+<li><strong>y_displae</strong> (<em>integer</em>) &#8211; the higher this value, the lower the text will be displayed. A
+value of 0 indicates that this message should be at the very top</li>
+<li><strong>size</strong> (<em>string</em>) &#8211; the size you want the text to be. default value is &#8220;small&#8221;</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">no return</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="keepAway.keepAway._keepAway__moveAgent">
+<code class="descname">_keepAway__moveAgent</code><span class="sig-paren">(</span><em>inputAgent</em>, <em>movementVector</em><span class="sig-paren">)</span><a class="headerlink" href="#keepAway.keepAway._keepAway__moveAgent" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a private function that is called by the moveAttempt function.
+this function is only called if a move is determined to be legal. Once
+the move is determined to be legal, this function will go and update the
+position of the agent on the field.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>inputAgent</strong> (<a class="reference internal" href="agent.html#module-agent" title="agent"><em>agent</em></a>) &#8211; a reference to the agent that is is being moved.</li>
+<li><strong>movementVector</strong> (<em>a tuple of floats</em>) &#8211; the vector that will be added to the inputAgent&#8217;s
+current position. The sum of the current position and the movementVector
+will be the new position of the inputAgent.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">no return</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is a private function that the user shouldn&#8217;t worry about calling.
+Only the move_attempt() function should be called.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="keepAway.keepAway._keepAway__replaceAgents">
+<code class="descname">_keepAway__replaceAgents</code><span class="sig-paren">(</span><em>inputClass</em><span class="sig-paren">)</span><a class="headerlink" href="#keepAway.keepAway._keepAway__replaceAgents" title="Permalink to this definition">¶</a></dt>
+<dd><p>During the game introduction, the user can select which agent should be run.
+After the user selects the agent, this function will go and 
+override the default agents with the agents the user has selected</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>inputClass</strong> (<em>agent.class</em>) &#8211; this is the class that the user has selected to 
+go and replace the default agents.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">no return</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="keepAway.keepAway._keepAway__sendCalcReceiveDecision">
+<code class="descname">_keepAway__sendCalcReceiveDecision</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#keepAway.keepAway._keepAway__sendCalcReceiveDecision" title="Permalink to this definition">¶</a></dt>
+<dd><p>This public function will send all keepers the receive decision. For more information
+on what the receive decision is, refer to the documentation of the module &#8220;calcReceive&#8221;</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">no return</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="keepAway.keepAway._keepAway__sendSimpleStateVars">
+<code class="descname">_keepAway__sendSimpleStateVars</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#keepAway.keepAway._keepAway__sendSimpleStateVars" title="Permalink to this definition">¶</a></dt>
+<dd><p>This public function will send all keepers the simple state variables.
+This function should be called for intelligent agents such as NEAT, 
+or Sarsa. This function will NOT be called for hyperNEAT, which 
+will instead, get a birds eye view of the entire field</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">no return</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="keepAway.keepAway._keepAway__text_objects">
+<code class="descname">_keepAway__text_objects</code><span class="sig-paren">(</span><em>text</em>, <em>color</em>, <em>size</em><span class="sig-paren">)</span><a class="headerlink" href="#keepAway.keepAway._keepAway__text_objects" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function will generate a text object to be printed 
+to the screen</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>text</strong> (<em>string</em>) &#8211; the message that you&#8217;re generating a text object for</li>
+<li><strong>color</strong> (<em>tuple of 3 integers. This is RGB, where each dimension 
+ranges from 0 to 255</em>) &#8211; the color you want the message to be</li>
+<li><strong>size</strong> (<em>string</em>) &#8211; the size you want the text to be.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">no return</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="keepAway.keepAway._keepAway__updateBallPosession">
+<code class="descname">_keepAway__updateBallPosession</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#keepAway.keepAway._keepAway__updateBallPosession" title="Permalink to this definition">¶</a></dt>
+<dd><p>This private function checks to see if a keeper or taker has intercepted the ball. If so,
+Then update the ball&#8217;s possession variable to indicate that the ball is currently in 
+possession, and also set the ball&#8217;s velocity/direction to 0.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">no return</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="keepAway.keepAway._keepAway__updateScore">
+<code class="descname">_keepAway__updateScore</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#keepAway.keepAway._keepAway__updateScore" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function simply increments the keeper&#8217;s score for each tick that the
+keepers manage to hold the ball without a taker taking it.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">no return</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="keepAway.keepAway.debugPassVectors">
+<code class="descname">debugPassVectors</code><span class="sig-paren">(</span><em>startPoint</em>, <em>vectors</em><span class="sig-paren">)</span><a class="headerlink" href="#keepAway.keepAway.debugPassVectors" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is meant to display yellow dots to help the programmer figure
+out if the getRotatedVectors function works correctly. The getRotatedVectors
+function ended up being discarded, but code for it is still kept incase
+the developers decide they want to use it later on</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>vectors</strong> (<em>a list of 2 vectors, each vector being a tuple of floats</em>) &#8211; 2 vectors that were calculated by getRotatedVectors</li>
+<li><strong>startPoint</strong> (<em>a tuple or list of floats</em>) &#8211; the vertex/starting point of the vector that you&#8217;re trying
+to rotate. You rotate about the vertex.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">no return</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="keepAway.keepAway.gameLoop">
+<code class="descname">gameLoop</code><span class="sig-paren">(</span><em>mode</em>, <em>turnOnGrid=False</em><span class="sig-paren">)</span><a class="headerlink" href="#keepAway.keepAway.gameLoop" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the main game loop. Each iteration of this counts as a tick. 
+With each tick, an agent can move keepAway.maxPlayerSpeed units, and the
+ball can move keepAway.maxBallSpeed units. At the end of each tick, the
+pygame screen is updated to the next frame.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">no return</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="keepAway.keepAway.game_intro">
+<code class="descname">game_intro</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#keepAway.keepAway.game_intro" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the introduction screen. It will prompt the user to select the 
+agent that should play keepaway. After selection of the agent, this loop will
+terminate and begin the main game loop.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">no return</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="keepAway.keepAway.get_agent_block_size">
+<code class="descname">get_agent_block_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#keepAway.keepAway.get_agent_block_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>this simply gets and returns the simulators agent_block_size, which 
+is the width and height of the agent in pixels.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">agent block size</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">integer</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="keepAway.keepAway.get_display_height">
+<code class="descname">get_display_height</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#keepAway.keepAway.get_display_height" title="Permalink to this definition">¶</a></dt>
+<dd><p>this simply gets and returns the simulators display height.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">simulator screen height</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">integer</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="keepAway.keepAway.get_display_width">
+<code class="descname">get_display_width</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#keepAway.keepAway.get_display_width" title="Permalink to this definition">¶</a></dt>
+<dd><p>this simply gets and returns the simulators display width.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">simulator screen width</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">integer</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="keepAway.keepAway.isGameOver">
+<code class="descname">isGameOver</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#keepAway.keepAway.isGameOver" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function simply checks whether or not the ball is out of bounds, or 
+intercepted by a taker. if so, then the game is over.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">true if ball out of bounds or intercepted by taker. otherwise false</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="keepAway.keepAway.moveAttempt">
+<code class="descname">moveAttempt</code><span class="sig-paren">(</span><em>inputAgent</em>, <em>reversedPolarCoord</em><span class="sig-paren">)</span><a class="headerlink" href="#keepAway.keepAway.moveAttempt" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is used by the agent in order to attempt movement on the 
+field. If the move is legal, the agent&#8217;s position is updated. If the 
+move is illegal, then nothing happens. A move is illegal if the agent 
+tries to go outside the boundaries of the field.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>inputAgent</strong> (<a class="reference internal" href="agent.html#module-agent" title="agent"><em>agent</em></a>) &#8211; a reference to the agent that is attempting to move</li>
+<li><strong>reversedPolarCoord</strong> (<em>tuple where first element is a tuple of floats, 
+and the 2nd element is a float or integer</em>) &#8211; the movement that the agent is trying to do. 
+the movement is represented as a tuple where the first element is a
+unit vector representing the direction the agent is trying to move, 
+and the 2nd element is the distance the agent is trying to move.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">true if move was successful, false if not</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="keepAway.keepAway.pause">
+<code class="descname">pause</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="headerlink" href="#keepAway.keepAway.pause" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function will pause the simulation and display a message to the
+screen</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>message</strong> (<em>String</em>) &#8211; the message that you want to display to the screen</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">no return</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="keepAway.keepAway.resetGameForTraining">
+<code class="descname">resetGameForTraining</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#keepAway.keepAway.resetGameForTraining" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a public function that is meant for resetting the simulator when in 
+training mode. Training mode will be used by the intelligent agents such as
+SARSA, NEAT, hyperNEAT, etc.</p>
+<p>All it does is reset the ball position, the agent positions, and also sets the
+individual agents &#8220;inPosession&#8221;, and &#8220;isKicking&#8221; flags to false, to indicate 
+that there are no agents that have posession of the ball, nor are there
+any agents kicking the ball.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">no return</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="handCoded.html" title="previous chapter">handCoded</a></li>
+      <li>Next: <a href="kUtil.html" title="next chapter">kUtil</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/keepAway.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, ali mizan.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="_sources/keepAway.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

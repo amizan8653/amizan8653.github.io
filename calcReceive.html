@@ -1,0 +1,274 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>calcReceive &mdash; Keepaway 7-1-2015 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '7-1-2015',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Keepaway 7-1-2015 documentation" href="index.html" />
+    <link rel="next" title="birdsEyeView" href="birdsEyeView.html" />
+    <link rel="prev" title="ball" href="ball.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-calcReceive">
+<span id="calcreceive"></span><h1>calcReceive<a class="headerlink" href="#module-calcReceive" title="Permalink to this headline">¶</a></h1>
+<p>This is a module of static functions whose sole purpose is simply 
+to calculate and return
+a tuple (Index_of_keeper_to_go_after_ball, intersection_coordinate).
+Index_of_keeper_to_go_after_ball will allow the keepers to decide which keeper
+is in the best position to intercept the ball. That keeper will run to the
+projected intersection point, the intersection_coordinate.</p>
+<p>All other keepers will try to position themselves to be open to receive
+a pass from the keeper going for the ball.</p>
+<dl class="function">
+<dt id="calcReceive.__calcOptimal">
+<code class="descclassname">calcReceive.</code><code class="descname">__calcOptimal</code><span class="sig-paren">(</span><em>worldRef</em>, <em>agentList</em>, <em>i</em>, <em>intersect</em><span class="sig-paren">)</span><a class="headerlink" href="#calcReceive.__calcOptimal" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is a private function meant to assist another private function called
+__calc_receive_ball_moving.</p>
+<p>once __calc_receive_ball_moving has calculated the intersection point, there&#8217;s 
+one last step: to make sure that the intersection point isn&#8217;t too close to 
+the out of bounds area. If the intersection point too close to out of bounds, 
+then return an intersection point along the path that the ball is traveling, but
+is just still safely away from the out of bounds areas.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is a private function that the user shouldn&#8217;t worry about calling.
+Only the calc_receive function should be called.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>worldRef</strong> (<em>keepAway class</em>) &#8211; a reference to the simulator class which is calling this function</li>
+<li><strong>agentList</strong> (<em>a list where each element is an agent class</em>) &#8211; a list provided by the simulator of all agents</li>
+<li><strong>i</strong> (<em>integer</em>) &#8211; the index of the agent running to the ball for the list agentList</li>
+<li><strong>intersect</strong> (<em>a tuple of floats</em>) &#8211; the intersection point that has been calculated, and might be too
+close to out of bounds</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the intersection coordinate which is safely within bounds, or the original
+intersection point if no such point is found</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple of floats</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="calcReceive.__calc_receive_ball_moving">
+<code class="descclassname">calcReceive.</code><code class="descname">__calc_receive_ball_moving</code><span class="sig-paren">(</span><em>worldRef</em>, <em>inputDirection</em>, <em>possessingKeeperIndex</em><span class="sig-paren">)</span><a class="headerlink" href="#calcReceive.__calc_receive_ball_moving" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is a private function meant to assist calc_receive. This function 
+will go and calculate the receive decision for the special case where the 
+ball is moving. The receive decision is a tuple that simply contains the 
+index of the keeper that should run towards the ball, and the coordinate 
+that the keeper should run to. 
+If the ball is moving, then calc_receieve will find an intersection point
+along the balls projected path that the selected keeper can run to. 
+The intercept point is selected such that the 
+selected keeper will run a short distance, be far away from the takers, 
+and also be far away from out of bounds.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is a private function that the user shouldn&#8217;t worry about calling.
+Only the calc_receieve function of this method will use this function.
+And only the simulator class should call the calc_receive function.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>worldRef</strong> (<a class="reference internal" href="keepAway.html#module-keepAway" title="keepAway"><em>keepAway</em></a>) &#8211; a reference to the simulator class which is calling this function</li>
+<li><strong>inputDirection</strong> (<em>tuple of floats</em>) &#8211; the current direction the ball is moving.</li>
+<li><strong>possessingKeeperIndex</strong> (<em>integer</em>) &#8211; the index of the keeper who currently has possession</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">tuple, where first element is the index of the keeper picked to run towards
+the ball. The simulator will use this index to look up the index of the keeper 
+in its self.keeperArray. The 2nd element is the intersection coordinate</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple where first element is integer, second element is tuple. 2nd element
+tuple contains integers</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="calcReceive.__isPointOutOfPlayRegion">
+<code class="descclassname">calcReceive.</code><code class="descname">__isPointOutOfPlayRegion</code><span class="sig-paren">(</span><em>worldRef</em>, <em>pointOfInterest</em>, <em>agentList</em>, <em>agentIndex</em><span class="sig-paren">)</span><a class="headerlink" href="#calcReceive.__isPointOutOfPlayRegion" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is a private function meant to assist another private function called
+__calcOptimal.</p>
+<p>This function will simply check to see if a point is too close to the out of bounds
+region. Returns true if out of safe region, false otherwise.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is a private function that the user shouldn&#8217;t worry about calling.
+Only the calc_receive function should be called.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>worldRef</strong> &#8211; a reference to the simulator class which is calling this function</li>
+<li><strong>pointOfInterest</strong> &#8211; the point that is being checked to see if it is too
+close to the out of bounds region</li>
+<li><strong>agentList</strong> &#8211; a list of all agents</li>
+<li><strong>agentIndex</strong> &#8211; the index of the agent running to the ball for the list agentList</li>
+<li><strong>worldRef</strong> &#8211; keepAway class</li>
+<li><strong>pointOfInterest</strong> &#8211; tuple of floats</li>
+<li><strong>agentList</strong> &#8211; a list where each element is of type agent class</li>
+<li><strong>agentIndex</strong> &#8211; integer</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">true if the point is too close to out of bounds, false otherwise</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="calcReceive.calc_receive">
+<code class="descclassname">calcReceive.</code><code class="descname">calc_receive</code><span class="sig-paren">(</span><em>worldRef</em>, <em>inputDirection=None</em><span class="sig-paren">)</span><a class="headerlink" href="#calcReceive.calc_receive" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is the only public function of this module. It will go and 
+calculate the receive decision, which is a tuple that simply contains the 
+index of the keeper that should run towards the ball, and the coordinate 
+that the keeper should run to. If the ball is stationary, the coordinate
+the selected keeper should run to is simply the coordinates of the ball. 
+If the ball is moving, then calc_receieve will find an intersection point
+along the balls projected path that the selected keeper can run to. 
+The intercept point is selected such that the 
+selected keeper will run a short distance, be far away from the takers, 
+and also be far away from out of bounds.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Only the simulator class should call the calc_receive method. This method
+will therefore return the noise-free interception point. The simulator
+must then add random noise to the noise-free interception point before
+passing the receive decision to a keeper. A different amount of noise value
+be added for each keeper.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>worldRef</strong> (<a class="reference internal" href="keepAway.html#module-keepAway" title="keepAway"><em>keepAway</em></a>) &#8211; a reference to the simulator class which is calling this function</li>
+<li><strong>inputDirection</strong> (<em>tuple of floats</em>) &#8211; the current direction the ball is moving. This parameter must 
+be specified if the ball is moving. If the ball is not moving, then leave this 
+parameter blank.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">tuple, where first element is the index of the keeper picked to run towards
+the ball. The simulator will use this index to look up the index of the keeper 
+in its self.keeperArray. The 2nd element is the intersection coordinate</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple where first element is integer, second element is tuple. 2nd element
+tuple contains integers</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="ball.html" title="previous chapter">ball</a></li>
+      <li>Next: <a href="birdsEyeView.html" title="next chapter">birdsEyeView</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/calcReceive.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, ali mizan.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="_sources/calcReceive.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

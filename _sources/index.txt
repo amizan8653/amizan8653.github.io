@@ -1,0 +1,40 @@
+.. keepaway documentation master file, created by
+   sphinx-quickstart on Sat Oct 10 00:56:44 2015.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Welcome to keepaway's documentation!
+====================================
+
+This is the documentation to the object oriented version of keepaway!
+this program is meant to allow AI algorithms to be implemented on
+the keepers to allow them to decide if they want to hold the ball, 
+or pass to either team mate. Everything else is deterministic.
+
+Here is a video demonstration of the hand coded agents playing:
+https://youtu.be/aEgvQnbLsk4
+
+Contents:
+
+.. toctree::
+   :maxdepth: 9
+   
+   agent
+   ball
+   calcReceive
+   birdsEyeView
+   handCoded
+   keepAway
+   kUtil
+   runme
+   getSimpleStateVars
+
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+
